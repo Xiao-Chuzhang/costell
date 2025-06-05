@@ -1,0 +1,246 @@
+/* editor.css */
+
+/* --- 基础与重置 --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    height: 100vh;
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8; /* 页面背景色 */
+    color: #333; /* 默认文字颜色 */
+    overflow: hidden; /* 防止body出现滚动条 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- 自定义滚动条 (Webkit内核浏览器) --- */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #e9ecef;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #868e96;
+}
+
+/* --- 头部区域 --- */
+header {
+    background-color: #007bff; /* 主题蓝 */
+    color: white;
+    padding: 18px 25px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10; /*确保在最上层*/
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.9em;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* --- 主要布局容器 --- */
+.editor-layout {
+    display: flex;
+    flex-grow: 1; /* 占据剩余垂直空间 */
+    padding: 15px;
+    gap: 15px;
+    overflow: hidden; /* 防止内部元素溢出导致滚动 */
+}
+
+/* --- 输入/输出面板 --- */
+.io-panel {
+    flex: 0 0 340px; /* 固定宽度 */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    overflow-y: auto; /* 内容超出时内部滚动 */
+}
+
+.panel-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+h2 {
+    font-size: 1.25em;
+    font-weight: 500;
+    color: #0056b3; /* 标题颜色 */
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+}
+
+h2 .icon {
+    margin-right: 8px;
+    font-size: 1.1em;
+    color: #007bff;
+}
+
+/* --- 文本输入域 --- */
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #495057;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+    resize: vertical;
+    min-height: 120px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* --- 按钮样式 --- */
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    font-size: 0.95em;
+    font-weight: 500;
+}
+button:active {
+    transform: translateY(1px);
+}
+
+.primary-button {
+    background-color: #007bff;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+}
+.primary-button:hover {
+    background-color: #0056b3;
+}
+
+.secondary-button {
+    background-color: #6c757d;
+    color: white;
+    box-shadow: 0 2px 4px rgba(108,117,125,0.2);
+}
+.secondary-button:hover {
+    background-color: #545b62;
+}
+
+button:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* --- 谱面编辑面板 --- */
+.chart-panel {
+    flex: 1; /* 占据剩余水平空间 */
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    padding: 0; /* 内边距由子元素控制 */
+    overflow: hidden; /* 防止内部元素溢出 */
+}
+
+.chart-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.chart-header h2 {
+    margin-bottom: 10px;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.editor-controls {
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    font-size: 0.88em;
+    color: #495057;
+}
+.editor-controls p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* --- Canvas 容器 --- */
+#canvasWrapper {
+    flex-grow: 1; /* 占据谱面编辑面板剩余垂直空间 */
+    width: 100%;
+    overflow: auto; /* Canvas超出时显示滚动条 */
+    background-color: #f8f9fa; /* Canvas外部背景 */
+    position: relative;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top: 1px solid #e9ecef; /* 与上方区域的分割线 */
+}
+
+#chartCanvas {
+    display: block; /* 移除Canvas下方默认空隙 */
+    background-color: #ffffff; /* Canvas绘制区域背景 */
+    cursor: default;
+}
+
+/* --- 状态消息提示 --- */
+.status-message {
+    margin-top: auto; /* 尝试推到底部 */
+    font-weight: 500;
+    font-size: 0.9em;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    word-wrap: break-word;
+    border: 1px solid transparent;
+}
+
+.status-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.status-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}

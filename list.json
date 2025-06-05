@@ -1,0 +1,20 @@
+[
+    {
+        "id": "song001",
+        "name": "Welcome to Costell",
+        "artist": "Colime",
+        "level": 3,
+        "cover": "assets/covers/Welcome to Costell.jpg",
+        "preview": "assets/previews/Welcome to Costell.mp3",
+        "gamePath": "songs/Welcome to Costell/index.html"
+    },
+    {
+        "id": "song002",
+        "name": "KING",
+        "artist": "Roselia",
+        "level": 6,
+        "cover": "assets/covers/KING.jpg",
+        "preview": "assets/previews/KING.mp3",
+        "gamePath": "songs/KING/index.html"
+    }
+]

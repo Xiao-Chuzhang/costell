@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costell III</title>
+    <link rel="icon" href="assets\icons\icon32.ico" type="image/x-icon">
+    <link rel="stylesheet" href="choose.css">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="glow-particle glow-particle-1"></div>
+        <div class="glow-particle glow-particle-2"></div>
+    </div>
+
+    <div id="app-container">
+        <h1 class="title">Costell III</h1>
+
+        <div id="controls-panel">
+            <div class="search-area">
+                <input type="text" id="search-input" placeholder="Search Here ...">
+                <button id="search-button" class="control-button"><span class="icon">🔍</span> 搜索</button>
+                <button id="clear-search-button" class="control-button hidden"><span class="icon">✖</span> 重写</button>
+            </div>
+            <button id="random-select-button" class="control-button main-action-button"><span class="icon">🎲</span> 换批歌曲</button>
+        </div>
+
+        <div id="song-select-panel">
+            <div id="song-list-container">
+                <div id="loading-message" class="state-message">LOADING...</div>
+                <div id="error-message" class="state-message hidden"></div>
+                <div id="no-results-message" class="state-message hidden"></div>
+                <div id="random-pool-reset-message" class="state-message hidden"></div>
+                <div id="song-list"></div>
+            </div>
+
+            <div id="selected-song-details">
+                <div class="details-text-wrapper">
+                    <h2 id="selected-song-name" class="glow-text">未选择</h2>
+                    <p id="selected-song-artist" class="faint-text"></p>
+                    <div class="level-display">
+                        LEVEL：<span id="selected-song-level" class="glow-level-text">N/A</span>
+                    </div>
+                </div>
+                <button id="start-game-button" class="glow-button" disabled>LET'S GO →</button>
+            </div>
+        </div>
+        <div class="controls-info"><span class="key-glow">Costell III</span> - Online</div>
+    </div>
+
+    <audio id="song-preview" loop></audio>
+
+    <script src="choose.js"></script>
+</body>
+</html>

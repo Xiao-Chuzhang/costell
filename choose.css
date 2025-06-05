@@ -1,0 +1,605 @@
+/* IMPORT Orbitron FONT */
+@import url('https://fonts.font.im/css2?family=Orbitron:wght@400;700&display=swap');
+
+/* ==========================================================================
+   Global Styles & Base
+   ========================================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden; /* Prevent horizontal scrollbar on body */
+    font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0d0d25, #0a0a20);
+    color: #e0e0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 0.5px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+/* ==========================================================================
+   Background Elements
+   ========================================================================== */
+.background-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Crucial for particle shadow clipping */
+    pointer-events: none;
+    z-index: 0;
+}
+
+.glow-particle {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(0, 255, 255, 0.01);
+    box-shadow: 0 0 20px 10px rgba(0, 255, 255, 0.025);
+    opacity: 0.08;
+    animation: floating-glow 60s infinite alternate ease-in-out;
+    will-change: transform, opacity;
+}
+
+.glow-particle-1 { width: 100px; height: 100px; top: 45%; left: 1%; animation-delay: 0s; }
+.glow-particle-2 {
+    width: 160px; height: 160px; bottom: 40%; right: 1%; animation-delay: 30s;
+    background-color: rgba(255, 0, 255, 0.01);
+    box-shadow: 0 0 20px 10px rgba(255, 0, 255, 0.025);
+}
+
+/* ==========================================================================
+   Main Application Container
+   ========================================================================== */
+#app-container {
+    display: flex;
+    flex-direction: column;
+    width: 95vw;
+    height: 95vh;
+    max-width: 1700px;
+    max-height: 950px;
+    padding: 40px;
+    background-color: rgba(10, 10, 30, 0.96);
+    border: 2px solid #00eaff;
+    box-shadow: 0 0 6px rgba(0, 234, 255, 0.1), 0 0 10px rgba(255, 0, 255, 0.05);
+    position: relative;
+    z-index: 1;
+    animation: app-border-pulse 4.5s infinite alternate ease-in-out;
+}
+
+/* ==========================================================================
+   Typography & Headings
+   ========================================================================== */
+.title {
+    font-size: 4.2em;
+    font-weight: 700;
+    color: #00eaff;
+    text-shadow: 0 0 3px #00ffff, 0 0 5px #00eaff, 0 0 8px #00aaff;
+    margin-bottom: 35px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    text-align: center;
+    animation: text-pulse 3.5s infinite alternate ease-in-out;
+    will-change: text-shadow;
+    flex-shrink: 0; /* Prevent title from being squashed */
+}
+
+/* ==========================================================================
+   Controls Panel (Search & Buttons)
+   ========================================================================== */
+#controls-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 35px;
+    gap: 20px;
+    flex-wrap: wrap;
+    flex-shrink: 0; /* Prevent controls from being squashed */
+}
+
+.search-area {
+    display: flex;
+    flex-grow: 1;
+    gap: 12px;
+    min-width: 400px;
+    align-items: center;
+}
+
+#search-input {
+    flex-grow: 1;
+    padding: 15px 22px;
+    border: 2px solid #00aaff;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 30, 0.8);
+    color: #e0e0ff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.15em;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 5px rgba(0, 200, 255, 0.15);
+    min-width: 0; /* Allow shrinking if space is tight */
+}
+
+#search-input::placeholder { color: #a0a0d0; opacity: 0.8; }
+
+#search-input:focus {
+    border-color: #00ffff;
+    box-shadow: inset 0 0 7px rgba(0, 255, 255, 0.25), 0 0 7px rgba(0, 255, 255, 0.15);
+}
+
+/* Common Button Style */
+.control-button {
+    padding: 14px 22px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #e0e0ff;
+    background: linear-gradient(135deg, #15153a, #202050);
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    box-shadow: 0 0 3px rgba(0, 255, 255, 0.08);
+    white-space: nowrap;
+    will-change: transform, box-shadow;
+    flex-shrink: 0; /* Prevent buttons from shrinking too much */
+}
+
+.control-button .icon { font-size: 1.15em; line-height: 1; }
+
+.control-button:hover {
+    background: linear-gradient(135deg, #25255a, #303070);
+    border-color: #00ffff;
+    box-shadow: 0 0 6px rgba(0, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.control-button:active {
+    transform: translateY(0);
+    box-shadow: inset 0 0 3px rgba(0, 255, 255, 0.1);
+}
+
+/* Main Action Button (e.g., Random) */
+.main-action-button {
+    background: linear-gradient(135deg, #e600e6, #00cccc);
+    color: #0a0a20;
+    text-shadow: 0 0 1px rgba(0,0,0,0.1);
+    box-shadow: 0 0 6px #e600e6, 0 0 10px #00cccc;
+}
+
+.main-action-button:hover {
+    background: linear-gradient(135deg, #d900d9, #00b3b3);
+    box-shadow: 0 0 10px #e600e6, 0 0 18px #00cccc;
+    transform: translateY(-2px);
+}
+
+.main-action-button:active {
+    box-shadow: 0 0 3px #e600e6, 0 0 7px #00cccc;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   Song Selection Area (List & Details)
+   ========================================================================== */
+#song-select-panel {
+    display: flex;
+    width: 100%;
+    flex-grow: 1; /* Takes remaining vertical space in #app-container */
+    gap: 40px;
+    justify-content: center;
+    align-items: stretch; /* Children fill height */
+    min-height: 0; /* Essential for flex-grow in a column parent */
+}
+
+/* Song List (Left Panel) */
+#song-list-container {
+    flex: 2; /* Default proportion */
+    background-color: rgba(0, 0, 20, 0.7);
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: inset 0 0 5px rgba(0, 234, 255, 0.1), 0 0 5px rgba(0, 234, 255, 0.1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #00eaff #00001a;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Allow shrinking */
+}
+
+/* Individual Song Item */
+.song-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: rgba(20, 20, 50, 0.5);
+    border: 1px solid rgba(50, 50, 100, 0.5);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    will-change: transform, background-color, border-color, box-shadow;
+    flex-shrink: 0; /* Prevent items from shrinking excessively */
+}
+
+.song-item:last-child { margin-bottom: 0; }
+
+.song-item::after { /* Hover/Selected shine effect element */
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(45deg, transparent, rgba(0, 234, 255, 0.02), transparent);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    z-index: 1;
+}
+
+.song-item:hover {
+    background-color: rgba(30, 30, 70, 0.7);
+    border-color: #00eaff;
+    transform: translateY(-3px);
+    box-shadow: 0 0 10px rgba(0, 234, 255, 0.2), inset 0 0 3px rgba(0, 234, 255, 0.08);
+}
+
+.song-item.selected {
+    background: linear-gradient(90deg, rgba(0, 200, 255, 0.1), rgba(0, 100, 255, 0.03));
+    border-color: #00eaff;
+    box-shadow: 0 0 12px #00eaff, 0 0 20px rgba(0, 234, 255, 0.2), inset 0 0 4px #00ffff;
+    color: #f0f8ff;
+    transform: scale(1.008);
+}
+
+.song-item.selected::after {
+    opacity: 1;
+    animation: shine 1.8s infinite linear;
+}
+
+.song-cover {
+    width: 120px; height: 120px;
+    min-width: 120px; min-height: 120px; /* Prevent squashing */
+    border-radius: 10px;
+    margin-right: 25px;
+    border: 3px solid rgba(0, 234, 255, 0.4);
+    box-shadow: 0 0 8px rgba(0, 234, 255, 0.3), inset 0 0 3px rgba(255,255,255,0.15);
+    object-fit: cover;
+    transition: all 0.3s ease;
+    will-change: transform, box-shadow, border-color;
+    flex-shrink: 0;
+}
+
+.song-item.selected .song-cover {
+    border-color: #00ffff;
+    box-shadow: 0 0 18px #00ffff, 0 0 30px rgba(0,255,255,0.5), inset 0 0 6px rgba(255,255,255,0.4);
+    transform: scale(1.05);
+}
+
+.song-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Allow text to ellipsis */
+}
+
+.song-title, .song-artist {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song-title {
+    font-size: 1.7em;
+    font-weight: 700;
+    color: #e0e0ff;
+    text-shadow: 0 0 3px rgba(224, 224, 255, 0.2), 0 0 4px rgba(224, 224, 255, 0.08);
+    line-height: 1.2;
+}
+
+.song-artist { font-size: 1em; color: #b0b0dd; margin-top: 5px; }
+.song-level { font-size: 1.3em; font-weight: 700; color: #d8d8ff; margin-top: 10px; }
+.song-level span { color: #00ffdd; text-shadow: 0 0 3px #00ffdd, 0 0 5px rgba(0, 255, 221, 0.2); }
+
+/* Selected Song Details (Right Panel) */
+#selected-song-details {
+    flex: 1; /* Default proportion */
+    background-color: rgba(0, 0, 20, 0.7);
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: inset 0 0 5px rgba(255, 0, 255, 0.1), 0 0 7px rgba(255, 0, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 320px; /* Minimum sensible width, adjust as needed */
+    max-width: 500px; /* Maximum sensible width */
+    text-align: center;
+}
+
+.details-text-wrapper {
+    flex-grow: 1; /* Takes available space, pushing button down */
+    flex-shrink: 1; /* Can shrink if content is small */
+    min-height: 0; /* Allows shrinking below content natural height & enables overflow scroll */
+    overflow-y: auto; /* Scroll if text content is too long */
+    scrollbar-width: thin;
+    scrollbar-color: #ff00ff #00001a; /* Magenta scrollbar for details panel */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px; /* Space before the Start Game button */
+    padding-right: 5px; /* Small padding if scrollbar appears */
+}
+
+#selected-song-name {
+    font-size: 3.5em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.2;
+    will-change: text-shadow;
+    word-break: break-word; /* Wrap long song names */
+}
+.glow-text { color: #00ffff; text-shadow: 0 0 5px #00ffff, 0 0 8px #00aaff, 0 0 12px #0077ff; }
+#selected-song-artist { font-size: 1.4em; color: #b0b0dd; margin-top: 10px; text-shadow: 0 0 2px rgba(176, 176, 221, 0.1); }
+.level-display { font-size: 2em; font-weight: 700; color: #d8d8ff; margin-top: 30px; }
+.glow-level-text { color: #ffdd00; text-shadow: 0 0 4px #ffdd00, 0 0 6px rgba(255, 221, 0, 0.25); }
+
+/* Start Game Button */
+.glow-button {
+    padding: 30px 60px;
+    font-size: 2.4em;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #e600e6, #00cccc);
+    color: #0a0a20;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 7px #e600e6, 0 0 12px #00cccc, 0 0 20px #e600e6;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    min-width: 300px;
+    will-change: transform, box-shadow;
+    align-self: center;
+    flex-shrink: 0; /* Button should not shrink */
+}
+.glow-button:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px #e600e6, 0 0 20px #00cccc, 0 0 35px #e600e6, inset 0 0 10px rgba(255,255,255,0.3);
+}
+.glow-button:active:not(:disabled) {
+    transform: scale(0.99);
+    box-shadow: 0 0 4px #e600e6, 0 0 8px #00cccc, 0 0 12px #e600e6, inset 0 0 4px rgba(255,255,255,0.2);
+}
+
+/* ==========================================================================
+   Auxiliary & State Messages
+   ========================================================================== */
+.controls-info {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.05em;
+    color: #b0b0dd;
+    background-color: rgba(20, 0, 40, 0.7);
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,0,255,0.2);
+    text-shadow: 0 0 3px #ff00ff, 0 0 5px rgba(255, 0, 255, 0.1);
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    animation: pulse-info 3.5s infinite alternate ease-in-out;
+    will-change: text-shadow, box-shadow;
+    z-index: 2; /* Above particles, within app-container */
+}
+.key-glow { color: #00ffff; text-shadow: 0 0 3px #00ffff, 0 0 5px #00ffff30; font-weight: bold; }
+
+.state-message { /* General class for messages like "Loading", "Error", etc. */
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.9em;
+    color: #00eaff;
+    text-shadow: 0 0 4px #00eaff, 0 0 7px rgba(0, 234, 255, 0.2);
+    text-align: center;
+    padding: 25px 35px;
+    background-color: rgba(0, 0, 15, 0.9);
+    border-radius: 12px;
+    border: 2px solid #00aaff;
+    width: 60%;
+    max-width: 500px;
+    box-shadow: 0 0 5px #00aaff, 0 0 10px rgba(0, 170, 255, 0.25);
+    z-index: 10; /* Above most other content */
+    animation: fade-in-scale 0.5s ease-out forwards;
+}
+#error-message { color: #ff4444; text-shadow: 0 0 4px #ff4444, 0 0 7px rgba(255, 68, 68, 0.2); border-color: #ff4444; box-shadow: 0 0 5px #ff4444, 0 0 10px rgba(255, 68, 68, 0.25); }
+#no-results-message { color: #ffaa00; text-shadow: 0 0 4px #ffaa00, 0 0 7px rgba(255, 170, 0, 0.2); border-color: #ffaa00; box-shadow: 0 0 5px #ffaa00, 0 0 10px rgba(255, 170, 0, 0.25); }
+#random-pool-reset-message { color: #00ffaa; text-shadow: 0 0 4px #00ffaa, 0 0 7px rgba(0, 255, 170, 0.2); border-color: #00ffaa; box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0, 255, 170, 0.25); }
+
+.hidden { display: none !important; opacity: 0 !important; visibility: hidden !important; }
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+@keyframes floating-glow {
+    0%, 100% { transform: translate(0, 0); opacity: 0.08; }
+    25% { transform: translate(3vw, 1.5vh) scale(1.002); opacity: 0.07; }
+    50% { transform: translate(-1.5vw, 0.5vh) scale(0.998); opacity: 0.09; }
+    75% { transform: translate(0.5vw, -2.5vh) scale(1.001); opacity: 0.075; }
+}
+@keyframes app-border-pulse {
+    0% { border-color: #00eaff; box-shadow: 0 0 8px rgba(0, 234, 255, 0.15), 0 0 15px rgba(255, 0, 255, 0.08); }
+    50% { border-color: #00ffff; box-shadow: 0 0 14px rgba(0, 234, 255, 0.25), 0 0 25px rgba(255, 0, 255, 0.15); }
+    100% { border-color: #00eaff; box-shadow: 0 0 8px rgba(0, 234, 255, 0.15), 0 0 15px rgba(255, 0, 255, 0.08); }
+}
+@keyframes text-pulse {
+    0%, 100% { text-shadow: 0 0 3px #00ffff, 0 0 5px #00eaff, 0 0 8px #00aaff; }
+    50% { text-shadow: 0 0 5px #00ffff, 0 0 10px #00eaff, 0 0 15px #00aaff, 0 0 20px rgba(0, 200, 255, 0.08); }
+}
+@keyframes shine { /* For selected song item */
+    0% { background: linear-gradient(45deg, transparent, rgba(0, 234, 255, 0.02), transparent); transform: translateX(-100%); }
+    50% { background: linear-gradient(45deg, transparent, rgba(0, 234, 255, 0.08), transparent); transform: translateX(0%); }
+    100% { background: linear-gradient(45deg, transparent, rgba(0, 234, 255, 0.02), transparent); transform: translateX(100%); }
+}
+@keyframes pulse-info { /* For .controls-info */
+    0%, 100% { text-shadow: 0 0 3px #ff00ff, 0 0 5px rgba(255, 0, 255, 0.1); box-shadow: 0 0 3px rgba(255,0,255,0.15); }
+    50% { text-shadow: 0 0 4px #ff00ff, 0 0 7px rgba(255, 0, 255, 0.15); box-shadow: 0 0 4px rgba(255,0,255,0.2); }
+}
+@keyframes fade-in-scale { /* For .state-message */
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* ==========================================================================
+   Responsive Design - Media Queries
+   ========================================================================== */
+
+/* Large Desktops & Laptops */
+@media (min-width: 1301px) {
+    /* Default styles generally cover this, specific overrides if needed */
+}
+
+/* Medium Desktops / Laptops / Large Tablets Landscape */
+@media (max-width: 1300px) {
+    #app-container { padding: 30px; }
+    .title { font-size: 3.8em; margin-bottom: 25px; }
+    #controls-panel { margin-bottom: 25px; gap: 15px; }
+    .search-area { min-width: 320px; }
+    #search-input { padding: 14px 20px; font-size: 1.05em; }
+    .control-button { padding: 12px 20px; font-size: 1em; }
+    #song-select-panel { gap: 30px; }
+    #song-list-container { padding: 20px; flex-basis: 65%; flex-grow: 7; /* Emphasize left panel */ }
+    .song-item { padding: 18px; margin-bottom: 12px; }
+    .song-cover { width: 100px; height: 100px; min-width: 100px; min-height: 100px; margin-right: 20px; }
+    .song-title { font-size: 1.6em; } .song-artist { font-size: 0.95em; } .song-level { font-size: 1.2em; }
+    #selected-song-details { padding: 30px; min-width: 300px; flex-basis: 35%; flex-grow: 3; }
+    #selected-song-name { font-size: 3.0em; } .song-artist { font-size: 1.25em; } .level-display { font-size: 1.7em; margin-top: 20px; }
+    .glow-button { padding: 25px 50px; font-size: 2.1em; min-width: 260px; }
+    .controls-info { padding: 10px 20px; font-size: 1em; bottom: 20px; }
+    .state-message { font-size: 1.7em; padding: 20px 30px; max-width: 420px; }
+}
+
+/* Tablets - Portrait */
+@media (max-width: 1024px) and (orientation: portrait) {
+    #app-container { padding: 20px; height: auto; min-height: 90vh; /* Allow scrolling if content overflows viewport */ }
+    .title { font-size: 2.8em; margin-bottom: 20px; }
+    #controls-panel { flex-direction: column; align-items: center; margin-bottom: 20px; gap: 12px; }
+    .search-area { flex-direction: column; width: 100%; min-width: unset; align-items: stretch; margin-bottom: 8px; gap: 8px; }
+    #search-input { width: 90%; max-width: 400px; margin: 0 auto; font-size: 1em; }
+    .control-button { width: 90%; max-width: 400px; margin: 0 auto; padding: 12px 18px; font-size: 0.95em; }
+    #song-select-panel { flex-direction: column; align-items: center; gap: 20px; flex-grow: 1; }
+    #song-list-container { width: 100%; max-width: 550px; height: auto; max-height: 45vh; padding: 15px; flex-grow: 0; flex-shrink: 1; }
+    #selected-song-details { width: 100%; max-width: 550px; min-height: auto; padding: 20px; flex-grow: 0; }
+    .details-text-wrapper { margin-bottom: 15px; }
+    #selected-song-name { font-size: 2.4em; } .song-artist { font-size: 1.1em; } .level-display { font-size: 1.4em; margin-top: 15px; }
+    .glow-button { padding: 18px 35px; font-size: 1.6em; width: 90%; max-width: 380px; margin: 0 auto; }
+    .song-item { padding: 15px; margin-bottom: 10px; }
+    .song-cover { width: 80px; height: 80px; min-width: 80px; min-height: 80px; margin-right: 15px; }
+    .song-title { font-size: 1.25em; } .song-artist { font-size: 0.85em; } .song-level { font-size: 1em; }
+    .controls-info { font-size: 0.85em; padding: 8px 15px; bottom: 15px; }
+    .state-message { font-size: 1.5em; padding: 15px 25px; max-width: 90%; }
+}
+
+/* Tablets - Landscape */
+@media (max-width: 1024px) and (orientation: landscape) {
+    #app-container { padding: 20px; }
+    .title { font-size: 2.8em; margin-bottom: 15px; }
+    #controls-panel { flex-direction: row; align-items: center; margin-bottom: 15px; justify-content: space-between; gap: 10px; }
+    .search-area { flex-direction: row; width: auto; min-width: 250px; margin-bottom: 0; flex-grow: 1; }
+    #search-input { width: auto; max-width: none; margin-bottom: 0; flex-grow: 1; font-size: 0.95em; padding: 12px 18px; }
+    .control-button { width: auto; max-width: none; padding: 12px 18px; font-size: 0.9em; }
+    #song-select-panel { flex-direction: row; align-items: stretch; gap: 20px; }
+    #song-list-container { flex-basis: 60%; flex-grow: 7; padding: 15px; }
+    #selected-song-details { flex-basis: 40%; flex-grow: 3; padding: 20px; min-width: 280px; }
+    .details-text-wrapper { margin-bottom: 15px; }
+    #selected-song-name { font-size: 2.5em; } .song-artist { font-size: 1.1em; } .level-display { font-size: 1.4em; margin-top: 15px;}
+    .glow-button { padding: 18px 35px; font-size: 1.6em; width: auto; min-width: 220px; }
+    .song-item { padding: 12px; } .song-cover { width: 75px; height: 75px; min-width: 75px; min-height: 75px; margin-right: 15px; }
+    .song-title { font-size: 1.2em; } .song-artist { font-size: 0.8em; } .song-level { font-size: 1em; }
+    .controls-info { font-size: 0.85em; bottom: 10px; }
+    .state-message { font-size: 1.5em; }
+}
+
+/* Phones - Portrait */
+@media (max-width: 600px) and (orientation: portrait) {
+    #app-container { padding: 12px; height: auto; min-height: 90vh; }
+    .title { font-size: 2.1em; margin-bottom: 15px; }
+    #controls-panel { gap: 10px; margin-bottom: 15px; flex-direction: column; align-items: center; }
+    .search-area { gap: 8px; flex-direction: column; width: 100%; align-items: stretch; margin-bottom: 5px; }
+    #search-input { padding: 10px 15px; font-size: 0.9em; margin: 0 auto 8px auto; width: 95%; max-width: 300px; }
+    .control-button { padding: 10px 15px; font-size: 0.85em; width: 95%; max-width: 300px; margin: 0 auto 5px auto; }
+    #song-select-panel { flex-direction: column; align-items: center; gap: 15px; flex-grow: 1; }
+    #song-list-container { padding: 10px; max-height: 40vh; width: 100%; max-width: 100%; height: auto; flex-shrink: 1; flex-grow: 0; }
+    #selected-song-details { padding: 15px; gap: 10px; width: 100%; max-width: 100%; min-height: auto; flex-grow: 0; }
+    .details-text-wrapper { margin-bottom: 10px; }
+    #selected-song-name { font-size: 1.8em; } .song-artist { font-size: 0.9em; } .level-display { font-size: 1.1em; margin-top: 10px; }
+    .glow-button { padding: 15px 30px; font-size: 1.3em; width: 95%; max-width: 300px; margin: 0 auto; }
+    .song-item { padding: 10px; margin-bottom: 8px; }
+    .song-cover { width: 60px; height: 60px; min-width: 60px; min-height: 60px; margin-right: 12px;}
+    .song-title { font-size: 1.05em; } .song-artist { font-size: 0.75em; } .song-level { font-size: 0.85em; }
+    .controls-info { font-size: 0.75em; padding: 6px 10px; bottom: 8px; }
+    .state-message { font-size: 1.1em; padding: 10px 15px; width: 90%; }
+}
+
+/* Phones - Landscape (use a common upper bound like 812px for devices like iPhone X/11/12 in landscape) */
+@media (max-height: 450px) and (max-width: 812px) and (orientation: landscape) { 
+    #app-container { padding: 8px; }
+    .title { font-size: 1.5em; margin-bottom: 5px; } /* Reduced significantly */
+    #controls-panel { flex-direction: row; flex-wrap: nowrap; justify-content: space-around; gap: 5px; margin-bottom: 5px; }
+    .search-area { flex-direction: row; width: auto; max-width: 60%; min-width: 150px; flex-grow: 1; }
+    #search-input { padding: 6px 8px; font-size: 0.75em; flex-grow: 1; min-width: 100px; }
+    .control-button { padding: 6px 8px; font-size: 0.7em; flex-shrink: 0; } /* Allow multiple buttons */
+    #song-select-panel { flex-direction: row; gap: 8px; align-items: stretch;}
+    #song-list-container { flex-basis: 55%; flex-grow: 2; padding: 8px; }
+    #selected-song-details { flex-basis: 45%; flex-grow: 1; padding: 8px; min-width: 160px; }
+    .details-text-wrapper { margin-bottom: 5px; padding-right: 3px; }
+    #selected-song-name { font-size: 1.1em; line-height: 1.1; margin-bottom: 2px;}
+    #selected-song-artist { font-size: 0.7em; margin-top: 1px; }
+    .level-display { font-size: 0.8em; margin-top: 5px; }
+    .glow-button { padding: 6px 10px; font-size: 0.9em; width: auto; min-width: 100px; }
+    .song-item { padding: 5px; margin-bottom: 4px; flex-direction: row; /* Ensure items are rows if cover shrinks a lot */ }
+    .song-cover { width: 35px; height: 35px; min-width: 35px; min-height: 35px; margin-right: 5px; border-width: 1px;}
+    .song-info { justify-content: center; } /* Better align text if cover is small */
+    .song-title { font-size: 0.8em; } .song-artist { font-size: 0.6em; margin-top:1px; } .song-level { font-size: 0.65em; margin-top:2px; }
+    .controls-info { display: none; }
+    .state-message { font-size: 0.9em; padding: 5px 8px; }
+}
+
+/* Very Small Phones - Portrait (e.g. iPhone SE 1st gen) */
+@media (max-width: 375px) and (orientation: portrait) { 
+    #app-container { padding: 8px; }
+    .title { font-size: 1.9em; margin-bottom: 10px; }
+    #controls-panel { margin-bottom: 10px; gap: 8px; }
+    #search-input { font-size: 0.85em; padding: 8px 12px; }
+    .control-button { font-size: 0.8em; padding: 8px 12px; }
+    #song-list-container { padding: 8px; max-height: 38vh; }
+    .song-item { padding: 8px; margin-bottom: 6px; }
+    .song-cover { width: 50px; height: 50px; min-width: 50px; min-height: 50px; margin-right: 8px;}
+    .song-title { font-size: 1em; } .song-artist { font-size: 0.7em; } .song-level { font-size: 0.8em; }
+    #selected-song-details { padding: 10px; gap: 8px; }
+    #selected-song-name { font-size: 1.7em; } .song-artist { font-size: 0.85em; } .level-display { font-size: 1em; margin-top: 8px;}
+    .glow-button { padding: 12px 25px; font-size: 1.2em; }
+    .controls-info { font-size: 0.7em; padding: 4px 8px; bottom: 5px;}
+    .state-message { font-size: 1em; padding: 8px 12px;}
+}

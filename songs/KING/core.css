@@ -1,0 +1,297 @@
+/* 引入 Orbitron 字体 */
+@import url('https://fonts.font.im/css2?family=Orbitron:wght@400;700&display=swap');
+
+body {
+    font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #0d0d25;
+    color: #e0e0ff;
+    overflow: hidden; /* 防止界面溢出导致滚动条 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+#gameCanvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* 游戏画布在底层 */
+}
+
+/* 顶部信息面板 */
+#info-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: clamp(40px, 8vh, 60px); /* 响应式高度，最小40px，首选8%视口高，最大60px */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 clamp(10px, 3vw, 20px); /* 响应式内边距 */
+    background-color: rgba(10, 10, 30, 0.9);
+    border-bottom: 2px solid #00eaff;
+    z-index: 100; /* 确保在游戏画布之上 */
+    box-sizing: border-box;
+    text-shadow: 0 0 6px #00ffff, 0 0 10px #00ffff;
+}
+
+#info-panel .info-item {
+    color: #d8d8ff;
+    display: flex;
+    align-items: center;
+}
+
+/* 分数显示区域 */
+.info-item.score-display {
+    font-size: clamp(1.5em, 4.5vw, 2em); /* 响应式字体大小 */
+    font-weight: 700;
+    min-width: 100px;
+    justify-content: flex-start;
+}
+#score { line-height: 1; }
+
+/* 判定文本显示区域 */
+.info-item.judgment-display {
+    flex-grow: 1;
+    text-align: center;
+    min-width: 200px;
+}
+#judgment-text {
+    display: inline-block;
+    font-weight: bold;
+    font-size: clamp(1.2em, 3.5vw, 1.8em); /* 响应式字体大小 */
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* 连击数显示区域 */
+.info-item.combo-display {
+    font-size: clamp(1.2em, 3.5vw, 1.8em); /* 响应式字体大小 */
+    font-weight: 700;
+    min-width: 80px;
+    justify-content: flex-end;
+    text-align: right;
+}
+#combo { line-height: 1; }
+
+/* 判定文本颜色 */
+.judgment-excellent { color: #00ffdd; text-shadow: 0 0 10px #00ffdd, 0 0 5px #00ffdd; }
+.judgment-bad { color: #ffaa00; text-shadow: 0 0 10px #ffaa00, 0 0 5px #ffaa00; }
+.judgment-miss { color: #ff4444; text-shadow: 0 0 10px #ff4444, 0 0 5px #ff4444; }
+
+/* 底部控制/版本信息 */
+.controls-info {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(0.7em, 2.5vw, 0.9em); /* 响应式字体大小 */
+    color: #b0b0dd;
+    background-color: rgba(20, 0, 40, 0.7);
+    padding: clamp(4px, 1.5vw, 6px) clamp(8px, 3vw, 12px); /* 响应式内边距 */
+    border-radius: 5px;
+    z-index: 100;
+    border: 1px solid rgba(255,0,255,0.4);
+    text-shadow: 0 0 4px #ff00ff;
+}
+
+/* 流速选择器容器 */
+#speed-selector-container {
+    position: fixed;
+    top: 30%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(10px, 4vw, 15px) clamp(15px, 6vw, 25px); /* 响应式内边距 */
+    background-color: rgba(15, 15, 40, 0.85);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 234, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 234, 255, 0.3), 0 0 20px rgba(0, 234, 255, 0.2);
+    z-index: 1001; /* 确保在结算遮罩之上，但在开始按钮之下（如有必要） */
+    color: #e0e0ff;
+    text-shadow: 0 0 5px #00eaff;
+    font-family: 'Orbitron', sans-serif;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#speed-selector-container label {
+    font-size: clamp(0.9em, 4vw, 1.2em); /* 响应式字体大小 */
+    margin-bottom: clamp(8px, 2.5vw, 12px); /* 响应式下边距 */
+    letter-spacing: 1px;
+}
+
+#speed-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: clamp(200px, 60vw, 250px); /* 响应式宽度 */
+    height: 10px;
+    background: #1a1a3a;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #00eaff;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: clamp(18px, 6vw, 22px); /* 响应式滑块宽度 */
+    height: clamp(18px, 6vw, 22px); /* 响应式滑块高度 */
+    background: #00eaff;
+    border-radius: 50%;
+    border: 2px solid #0d0d25;
+    box-shadow: 0 0 8px #00eaff, 0 0 12px #00eaff;
+}
+
+#speed-slider::-moz-range-thumb {
+    width: clamp(18px, 6vw, 20px); /* 响应式滑块宽度 */
+    height: clamp(18px, 6vw, 20px); /* 响应式滑块高度 */
+    background: #00eaff;
+    border-radius: 50%;
+    border: 2px solid #0d0d25;
+    box-shadow: 0 0 8px #00eaff, 0 0 12px #00eaff;
+    cursor: pointer;
+}
+#speed-slider::-moz-range-track {
+    background: #1a1a3a;
+    height: 10px;
+    border-radius: 5px;
+    border: 1px solid #00eaff;
+}
+
+#speed-value-display {
+    font-size: clamp(1.1em, 5vw, 1.4em); /* 响应式字体大小 */
+    font-weight: 700;
+    color: #c000ff;
+    text-shadow: 0 0 10px #c000ff, 0 0 5px #c000ff;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* 开始/重试按钮 */
+#start-button {
+    position: fixed;
+    top: 50%; /* 游戏开始前在中间，游戏结束后通过JS调整到80% */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: clamp(15px, 6vw, 28px) clamp(30px, 12vw, 55px); /* 响应式内边距 */
+    font-size: clamp(1.5em, 8vw, 2.2em); /* 响应式字体大小 */
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #ff00ff, #00ffff);
+    color: #0d0d25;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1002; /* 确保在所有其他UI元素之上 */
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff, 0 0 30px #ff00ff, inset 0 0 10px rgba(255,255,255,0.5);
+    opacity: 1;
+    visibility: visible;
+}
+#start-button:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff, 0 0 45px #ff00ff, inset 0 0 15px rgba(255,255,255,0.6);
+}
+#start-button:active {
+    transform: translate(-50%, -50%) scale(0.98);
+    box-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff, 0 0 15px #ff00ff, inset 0 0 5px rgba(255,255,255,0.4);
+}
+
+/* 游戏结算遮罩层 */
+#results-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(10, 0, 30, 0.92);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001; /* 确保在游戏画布之上，但低于开始按钮 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+    backdrop-filter: blur(5px); /* 毛玻璃效果 */
+}
+#results-overlay:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease-in-out, visibility 0s linear 0s;
+}
+
+/* 最终分数显示 */
+#final-score-display {
+    font-size: clamp(3em, 15vw, 8em); /* 响应式字体大小，防止溢出 */
+    font-weight: 700;
+    color: #00eaff;
+    text-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff, 0 0 50px #00aaff;
+    margin-bottom: clamp(10px, 3vw, 20px); /* 响应式下边距 */
+    animation: score-appear 1s ease-out forwards;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+/* Full Combo 文本 */
+#full-combo-text {
+    font-size: clamp(1.5em, 8vw, 4em); /* 响应式字体大小，防止溢出 */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff55cc;
+    margin-bottom: clamp(15px, 4vw, 30px); /* 响应式下边距 */
+}
+#full-combo-text.flicker {
+    animation: flicker-animation 1.5s infinite alternate;
+}
+
+/* 通用隐藏类 */
+.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important; 
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s !important;
+}
+#speed-selector-container.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s !important;
+}
+#start-button.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s !important;
+}
+
+/* 动画效果 */
+@keyframes score-appear {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes flicker-animation {
+    0%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff55cc, 0 0 40px #ff00aa;
+    }
+    50% {
+        opacity: 0.7;
+        text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 15px #ff55cc;
+    }
+}

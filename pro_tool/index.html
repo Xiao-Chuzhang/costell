@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costell III 谱面制作</title>
+    <link href="https://fonts.font.im/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+    <header>
+        <h1>Costell III Chart Maker</h1>
+    </header>
+
+    <main class="editor-layout">
+        <aside class="io-panel">
+            <div class="panel-section">
+                <h2><span class="icon">📥</span> 载入</h2>
+                <textarea id="bandoriJsonInput" rows="8" placeholder="粘贴 Bestdori 代码于此"></textarea>
+                <button id="parseButton" class="primary-button">解析加载</button>
+            </div>
+
+            <div class="panel-section">
+                <h2><span class="icon">📤</span> 导出</h2>
+                <textarea id="costellJsonOutput" rows="8" readonly placeholder="Costell III 代码在此"></textarea>
+                <button id="exportButton" class="secondary-button">生成数据</button>
+            </div>
+            <p id="statusMessage" class="status-message"></p>
+        </aside>
+
+        <section class="chart-panel">
+            <div class="chart-header">
+                <h2><span class="icon">🎼</span> 工作区</h2>
+                <div class="editor-controls">
+                    <p><strong>提示：</strong> 单击可选中音符；拖拽音符主体可修改其轨道；拉伸音符边缘可修改其宽度；音符选中后可按 Delete 或 Backspace 键删除。</p>
+                </div>
+            </div>
+            <div id="canvasWrapper" class="canvas-wrapper">
+                <canvas id="chartCanvas"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <script src="editor.js"></script>
+</body>
+</html>

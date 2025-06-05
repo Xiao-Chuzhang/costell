@@ -1,0 +1,715 @@
+/* style.css */
+
+/* --- CSS 自定义属性 (Variables) --- */
+/* ---------------------------------- */
+:root {
+    /* 颜色 */
+    --color-bg-dark: #000000;
+    --color-bg-gradient-start: #0d0d25;
+    --color-bg-gradient-end: #0a0a20;
+    --color-text-light: #e0e0ff; /* 主体文本 */
+    --color-text-subtle: #b0b0dd; /* 次要文本 */
+
+    --color-accent-cyan: #00ffff; /* 主发光色 (青色) */
+    --color-accent-magenta: #e600e6; /* 次要发光色 (洋红色) */
+    --color-accent-purple: #ff00ff; /* FAQ展开图标和部分次要光效 */
+
+    --color-border-primary: rgba(0, 200, 255, 0.1); /* 主边框/分隔线 */
+    --color-border-secondary: rgba(0, 255, 255, 0.15); /* 次要边框 (例如按钮) */
+    --color-border-focus: #00eaff; /* 聚焦状态边框 */
+
+    /* 字体 */
+    --font-family-headings: 'Orbitron', sans-serif;
+    --font-family-body: 'Google Sans', Arial, Helvetica, sans-serif;
+
+    /* 间距 */
+    --spacing-sm: 12px;
+    --spacing-md: 20px;
+    --spacing-lg: 40px;
+    --spacing-xl: 60px;
+    --spacing-xxl: 80px;
+    --spacing-xxxl: 100px;
+}
+
+/* --- 基础样式与重置 --- */
+/* -------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 0; /* 顶栏移除后不需要顶部内边距 */
+}
+
+body {
+    font-family: var(--font-family-body);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, var(--color-bg-gradient-start), var(--color-bg-gradient-end));
+    color: var(--color-text-light);
+    letter-spacing: 0.5px;
+    position: relative;
+    /* 确保整个 body 有足够的高度以便滚动到末尾 */
+    min-height: 100vh;
+}
+
+body.dark-mode {
+    background-color: var(--color-bg-dark); /* 当 class dark-mode 应用时，使用纯黑背景 */
+}
+
+/* 全局可访问性：键盘焦点状态视觉反馈 */
+:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+    border-radius: 4px; /* 适用于大多数元素 */
+}
+.button:focus-visible, .faq-question:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 4px; /* 对按钮和可点击的 FAQ 提问增加偏移量，使其更明显 */
+    border-radius: 8px; /* 匹配按钮和 FAQ item 的圆角 */
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 确保根容器也撑满视口，便于 sticky footer */
+    position: relative;
+    z-index: 1; /* 确保主体内容在可能存在的全局背景动画之上 */
+
+    /* 全局页面边框脉冲动画 (替代了原先 header 的动画意图) */
+    /* animation: app-border-pulse 4s infinite alternate ease-in-out; */
+    /* box-shadow: 0 0 8px rgba(0, 234, 255, 0.15), 0 0 15px rgba(255, 0, 255, 0.08); */
+    /*
+        注释掉 box-shadow 和 animation 以保持页面整体的简洁，
+        如果需要整个页面边缘的发光效果，可以取消注释并调整参数。
+        为了鲁棒性，确保效果不干扰主要内容。
+    */
+}
+
+main {
+    flex: 1; /* 允许主内容区占用可用空间，将页脚推至底部 */
+}
+
+img, svg, video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul {
+   list-style: none;
+}
+
+.container {
+    width: 100%;
+    max-width: 1246px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: max(var(--spacing-md), 5%); /* 响应式内边距 */
+    padding-right: max(var(--spacing-md), 5%);
+}
+
+/* --- 全局元素与排版 --- */
+/* -------------------- */
+h1, h2, h3, h4, h5, h6, .button {
+    font-family: var(--font-family-headings);
+}
+
+.glow-text {
+    color: var(--color-accent-cyan);
+    /* 默认发光效果，为 hero-title 留出更强的效果 */
+    text-shadow: 0 0 5px var(--color-accent-cyan), 0 0 8px #00aaff, 0 0 12px #0077ff;
+    animation: text-pulse 3.5s infinite alternate ease-in-out;
+    will-change: text-shadow, transform;
+}
+
+.sub-glow-text {
+    color: var(--color-text-subtle);
+    text-shadow: 0 0 2px rgba(176, 176, 221, 0.1);
+}
+
+/* --- 按钮 (受 choose.css 启发) --- */
+/* --------------------------- */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 500;
+    line-height: 1.2;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    min-height: 48px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-family: var(--font-family-headings);
+    will-change: transform, box-shadow;
+}
+
+.button-primary {
+    background: linear-gradient(135deg, var(--color-accent-magenta), var(--color-accent-cyan));
+    color: var(--color-bg-dark); /* 与亮色背景形成对比的暗文本 */
+    text-shadow: 0 0 1px rgba(0,0,0,0.1);
+    box-shadow: 0 0 7px var(--color-accent-magenta), 0 0 12px var(--color-accent-cyan), 0 0 20px var(--color-accent-magenta);
+}
+
+.button-primary:hover {
+    background: linear-gradient(135deg, #d900d9, #00b3b3); /* 稍暗的渐变 */
+    box-shadow: 0 0 10px var(--color-accent-magenta), 0 0 18px var(--color-accent-cyan), 0 0 30px var(--color-accent-magenta);
+    transform: translateY(-2px);
+}
+
+.button-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 0 4px var(--color-accent-magenta), 0 0 8px var(--color-accent-cyan), 0 0 12px var(--color-accent-magenta);
+}
+
+
+.button-secondary {
+    background: linear-gradient(135deg, #15153a, #202050); /* 暗背景渐变 */
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border-secondary);
+    box-shadow: 0 0 3px rgba(0, 255, 255, 0.08);
+}
+
+.button-secondary:hover {
+    background: linear-gradient(135deg, #25255a, #303070); /* 稍亮的暗背景渐变 */
+    border-color: var(--color-accent-cyan);
+    box-shadow: 0 0 6px rgba(0, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.button-secondary:active {
+    transform: translateY(0);
+    box-shadow: inset 0 0 3px rgba(0, 255, 255, 0.1);
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    justify-content: center;
+}
+
+/* --- 英雄区 (Hero Section) --- */
+/* ------------------------ */
+.hero {
+    min-height: 100vh; /* 撑满视口高度 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-xl) 0; /* 适应内容，同时保留弹性 */
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0; /* 覆盖整个父容器 */
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.3)), url('background.jpg') no-repeat center center;
+    background-size: cover;
+    opacity: 0.99;
+    z-index: 0;
+    filter: blur(8px);
+    transform: scale(1.05); /* 稍微放大以避免模糊边缘裁剪 */
+}
+
+/* 来自 choose.css 的背景粒子效果 */
+.glow-particle {
+    position: absolute; border-radius: 50%;
+    background-color: rgba(0, 255, 255, 0.01); /* 半透明青色 */
+    box-shadow: 0 0 20px 10px rgba(0, 255, 255, 0.025);
+    opacity: 0.08;
+    animation: floating-glow 60s infinite alternate ease-in-out;
+    will-change: transform, opacity; /* 告知浏览器这些属性会变化以优化性能 */
+}
+
+.glow-particle-1 { width: 100px; height: 100px; top: 45%; left: 1%; animation-delay: 0s; }
+.glow-particle-2 {
+    width: 160px; height: 160px; bottom: 40%; right: 1%; animation-delay: 30s;
+    background-color: rgba(255, 0, 255, 0.01); /* 半透明洋红色 */
+    box-shadow: 0 0 20px 10px rgba(255, 0, 255, 0.025);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero h1 {
+    font-size: clamp(3.5rem, 9vw, 6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 3px;
+    margin-bottom: var(--spacing-md); /* 调整间距 */
+    text-wrap: balance; /* 自动平衡文本行长 */
+    font-family: var(--font-family-headings);
+}
+
+/* 增强第一个大标题的特效 */
+.hero h1.glow-text {
+    color: var(--color-accent-cyan);
+    text-shadow:
+        0 0 10px rgba(0, 255, 255, 0.6), /* 强内部光 */
+        0 0 20px rgba(0, 255, 255, 0.4),
+        0 0 30px rgba(0, 255, 255, 0.3),
+        0 0 40px rgba(0, 255, 255, 0.2); /* 外部扩散光 */
+    animation: hero-text-pulse 4s infinite alternate ease-in-out;
+}
+
+.hero h2 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 400;
+    color: var(--color-text-subtle);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: balance;
+    margin-bottom: var(--spacing-lg); /* 调整间距 */
+    letter-spacing: 0.8px;
+}
+
+/* --- 功能区 (Features Section) --- */
+/* ----------------------------- */
+.features {
+    padding: var(--spacing-xxxl) 0; /* 上下内边距 */
+    text-align: center;
+}
+
+.features h2 {
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xl); /* 调整间距 */
+    text-wrap: balance;
+    font-family: var(--font-family-headings);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg); /* 网格间距 */
+    text-align: left;
+}
+
+.feature-item {
+    background-color: rgba(0, 0, 20, 0.7);
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    border: 1px solid var(--color-border-primary);
+    box-shadow: inset 0 0 5px rgba(0, 234, 255, 0.1), 0 0 5px rgba(0, 234, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-border-focus); /* 聚焦边框颜色 */
+    box-shadow: 0 0 12px rgba(0, 234, 255, 0.2), inset 0 0 4px rgba(0, 234, 255, 0.08);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, rgba(0, 234, 255, 0.1), rgba(255, 0, 255, 0.1));
+    width: var(--spacing-xl);
+    height: var(--spacing-xl);
+    border-radius: 50%;
+    line-height: 1;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+.feature-item h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-accent-cyan);
+    text-shadow: 0 0 2px var(--color-accent-cyan);
+    font-family: var(--font-family-headings);
+}
+
+.feature-item p {
+    color: rgba(224, 224, 255, 0.8);
+    font-size: 1rem;
+}
+
+/* --- CTA 区 (Call to Action Section) --- */
+/* ---------------------------------- */
+.cta-section {
+     padding: var(--spacing-xxxl) 0;
+     text-align: center;
+     background-color: rgba(255, 255, 255, 0.03);
+     border-top: 1px solid var(--color-border-primary);
+     border-bottom: 1px solid var(--color-border-primary);
+}
+
+.cta-section h2 {
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    text-wrap: balance;
+    font-family: var(--font-family-headings);
+}
+
+/* --- 关于内容 (About Content) --- */
+/* -------------------------- */
+.about-content {
+    padding: var(--spacing-xxl) 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-content h2 {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border-secondary);
+    display: inline-block;
+    font-family: var(--font-family-headings);
+}
+
+.about-content p {
+    color: rgba(224, 224, 255, 0.85);
+    line-height: 1.7;
+    margin-bottom: 1.5em;
+}
+
+.about-content ul {
+    list-style: disc;
+    padding-left: var(--spacing-md);
+    margin-bottom: 1.5em;
+    color: rgba(224, 224, 255, 0.85);
+}
+
+.about-content li {
+    margin-bottom: 0.8em;
+}
+
+.about-image-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: rgba(0, 0, 30, 0.7);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(224, 224, 255, 0.4);
+    font-style: italic;
+    margin: var(--spacing-lg) 0;
+    border: 2px dashed rgba(0, 200, 255, 0.2);
+    box-shadow: inset 0 0 10px rgba(0, 200, 255, 0.1), 0 0 8px rgba(0, 200, 255, 0.1);
+}
+
+/* 将此处 inline style 移除并放置在 CSS 文件中 */
+.about-content > p:last-child {
+    text-align: center;
+    margin-top: var(--spacing-lg);
+}
+
+/* --- 常见问题 (FAQ Section) --- */
+/* ------------------------- */
+.faq {
+    padding: var(--spacing-xxl) 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq h2 {
+     font-size: clamp(2rem, 6vw, 3rem);
+     font-weight: 700;
+     margin-bottom: var(--spacing-xl);
+     text-align: center;
+     font-family: var(--font-family-headings);
+}
+
+.faq-item {
+    background-color: rgba(0, 0, 15, 0.5);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 8px;
+    margin-bottom: var(--spacing-sm);
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0, 234, 255, 0.05);
+}
+
+.faq-item.open {
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 8px rgba(0, 234, 255, 0.2), inset 0 0 3px rgba(0, 234, 255, 0.1);
+}
+
+.faq-question {
+    background: none;
+    border: none;
+    color: var(--color-accent-cyan);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-align: left;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 500;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+    font-family: var(--font-family-headings);
+}
+
+.faq-question:hover {
+    color: var(--color-border-focus);
+    text-shadow: 0 0 3px var(--color-accent-cyan);
+}
+
+.faq-question::after {
+    content: '+';
+    font-size: 1.8rem;
+    transition: transform 0.3s ease;
+    margin-left: 1em;
+    color: var(--color-border-focus);
+}
+
+.faq-item.open .faq-question::after {
+    transform: rotate(45deg);
+    color: var(--color-accent-purple); /* 展开时图标颜色 */
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out; /* 使用 ease-out 使收起更快 */
+    color: rgba(224, 224, 255, 0.8);
+    padding: 0 var(--spacing-lg) 0 var(--spacing-lg);
+}
+.faq-item.open .faq-answer {
+    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg); /* 展开时底部填充 */
+}
+.faq-answer p {
+     margin-bottom: 1em;
+}
+.faq-answer p:last-child{
+    margin-bottom: 0; /* 移除最后一项段落的下边距 */
+}
+
+/* --- 页脚 (Footer) --- */
+/* ----------------- */
+.site-footer {
+    border-top: 1px solid var(--color-border-primary);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-xxl);
+    color: rgba(224, 224, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.footer-links {
+    display: flex;
+    gap: var(--spacing-xxxl);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-links a {
+    color: rgba(224, 224, 255, 0.8);
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--color-accent-cyan);
+    text-decoration: underline;
+}
+
+/* --- 动画 --- */
+/* --------- */
+@keyframes floating-glow {
+    0%, 100% { transform: translate(0, 0); opacity: 0.08; }
+    25% { transform: translate(3vw, 1.5vh) scale(1.002); opacity: 0.07; }
+    50% { transform: translate(-1.5vw, 0.5vh) scale(0.998); opacity: 0.09; }
+    75% { transform: translate(0.5vw, -2.5vh) scale(1.001); opacity: 0.075; }
+}
+
+/* 全局主体边框脉冲动画 (如果需要，目前注释掉了) */
+/*
+@keyframes app-border-pulse {
+    0% { box-shadow: 0 0 8px rgba(0, 234, 255, 0.15), 0 0 15px rgba(255, 0, 255, 0.08); }
+    50% { box-shadow: 0 0 14px rgba(0, 234, 255, 0.25), 0 0 25px rgba(255, 0, 255, 0.15); }
+    100% { box-shadow: 0 0 8px rgba(0, 234, 255, 0.15), 0 0 15px rgba(255, 0, 255, 0.08); }
+}
+*/
+
+/* 针对 hero h1 的更强文本脉冲动画 */
+@keyframes hero-text-pulse {
+    0%, 100% {
+        text-shadow:
+            0 0 10px rgba(0, 255, 255, 0.6),
+            0 0 20px rgba(0, 255, 255, 0.4),
+            0 0 30px rgba(0, 255, 255, 0.3),
+            0 0 40px rgba(0, 255, 255, 0.2);
+        transform: scale(1);
+    }
+    50% {
+        text-shadow:
+            0 0 15px rgba(0, 255, 255, 0.8), /* 更强的内部光 */
+            0 0 25px rgba(0, 255, 255, 0.6),
+            0 0 40px rgba(0, 255, 255, 0.5),
+            0 0 60px rgba(0, 255, 255, 0.4), /* 更强的外部光 */
+            0 0 80px rgba(255, 0, 255, 0.1); /* 额外的一层品红光，增加层次感 */
+        transform: scale(1.02); /* 略微放大 */
+    }
+}
+
+/* 默认文本脉冲动画 (非 hero h1 的 glow-text 仍使用此动画) */
+@keyframes text-pulse {
+    0%, 100% { text-shadow: 0 0 3px var(--color-accent-cyan), 0 0 5px var(--color-border-focus), 0 0 8px #00aaff; }
+    50% { text-shadow: 0 0 5px var(--color-accent-cyan), 0 0 10px var(--color-border-focus), 0 0 15px #00aaff, 0 0 20px rgba(0, 200, 255, 0.08); }
+}
+
+/* --- 响应式设计 --- */
+/* --------------- */
+@media (max-width: 768px) {
+    .features-grid {
+         grid-template-columns: 1fr;
+         gap: var(--spacing-md);
+    }
+
+     .footer-container {
+         flex-direction: column;
+         text-align: center;
+     }
+
+     .hero h1 {
+        font-size: clamp(2.8rem, 9vw, 4.5rem);
+        letter-spacing: 1px;
+     }
+     .hero h2 {
+        font-size: clamp(1.2rem, 4vw, 1.6rem);
+     }
+     .button-group {
+        gap: var(--spacing-sm);
+     }
+     .button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 1em;
+        min-height: 40px;
+     }
+     .features h2, .cta-section h2, .faq h2, .about-content h2 {
+        font-size: clamp(1.6rem, 6vw, 2.5rem);
+        margin-bottom: var(--spacing-lg);
+     }
+     .feature-item {
+        padding: var(--spacing-md);
+     }
+     .feature-icon {
+        font-size: 2rem;
+        width: var(--spacing-lg);
+        height: var(--spacing-lg);
+        margin-bottom: var(--spacing-sm);
+     }
+     .feature-item h3 {
+        font-size: 1.2rem;
+     }
+     .faq-question {
+        font-size: 1rem;
+        padding: var(--spacing-sm) var(--spacing-md);
+     }
+     .faq-answer {
+        padding: 0 var(--spacing-md) 0 var(--spacing-md);
+     }
+     .faq-item.open .faq-answer {
+        padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+     }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding-left: var(--spacing-sm);
+        padding-right: var(--spacing-sm);
+    }
+    .hero h1 {
+        font-size: clamp(2.2rem, 10vw, 3.5rem);
+    }
+    .hero h2 {
+        font-size: clamp(1rem, 4.5vw, 1.4rem);
+        margin-bottom: var(--spacing-md);
+    }
+    .button {
+        padding: 10px 18px;
+        font-size: 0.9em;
+        min-height: 38px;
+    }
+    .features h2, .cta-section h2, .faq h2, .about-content h2 {
+        font-size: clamp(1.4rem, 7vw, 2rem);
+        margin-bottom: var(--spacing-md);
+    }
+    .feature-item {
+        padding: var(--spacing-sm);
+    }
+    .feature-icon {
+        font-size: 1.8rem;
+        width: 45px;
+        height: 45px;
+        margin-bottom: var(--spacing-sm);
+    }
+    .feature-item h3 {
+        font-size: 1.1rem;
+    }
+    .faq-question {
+        font-size: 0.95rem;
+        padding: var(--spacing-sm) var(--spacing-sm);
+    }
+    .faq-question::after {
+        font-size: 1.5rem;
+    }
+    .faq-answer {
+        padding: 0 var(--spacing-sm) 0 var(--spacing-sm);
+    }
+    .faq-item.open .faq-answer {
+        padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
+    }
+    .footer-links {
+        gap: var(--spacing-md);
+    }
+    .site-footer {
+        padding: var(--spacing-md) 0;
+        margin-top: var(--spacing-xl);
+    }
+    .about-content {
+        padding: var(--spacing-xl) 0;
+    }
+    .about-content h2 {
+        margin-bottom: var(--spacing-md);
+    }
+    .about-image-placeholder {
+        margin: var(--spacing-md) 0;
+    }
+    .about-content > p:last-child { /* 选择最后一个直接的段落 */
+        margin-top: var(--spacing-lg);
+    }
+}

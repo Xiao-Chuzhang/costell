@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Costell III</title>
+    <link rel="icon" href="..\assets\icons\icon32.ico" type="image/x-icon">
+    <link rel="stylesheet" href="autoplay.css">
+</head>
+<body>
+    <!-- 游戏信息显示面板 -->
+    <div id="info-panel">
+        <div class="info-item score-display"><span id="score">0</span></div>
+        <div class="info-item judgment-display"><span id="judgment-text"></span></div>
+        <div class="info-item combo-display"><span id="combo">0</span></div>
+    </div>
+
+    <!-- 游戏主绘图区域 -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- 版本提示信息 -->
+    <p class="controls-info">※ Costell III ※</p>
+    <!-- 开始/重试按钮 -->
+    <button id="start-button">GO !!!</button>
+
+    <!-- 游戏结算遮罩层 -->
+    <div id="results-overlay" class="hidden">
+        <div id="final-score-display">0</div>
+        <div id="full-combo-text" class="hidden">FULL COMBO!</div>
+    </div>
+
+    <script src="autoplay.js"></script>
+</body>
+</html>
